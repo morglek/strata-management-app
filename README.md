@@ -1,0 +1,1 @@
+# StrataManagementA1
