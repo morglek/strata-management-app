@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact - Strata Management</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Contact Us</h1>
+    <nav>
+      <ul>
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/notifications.html">Notifications</a></li>
+        <li><a href="/faq.html">FAQ</a></li>
+        <li><a href="/committee.html">Committee Info</a></li>
+        <li><a href="/contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section>
+      <h2>Send a Message (POST Request)</h2>
+      <form action="/api/contact" method="POST">
+        <label for="name-post">Name:</label><br>
+        <input type="text" id="name-post" name="name" required /><br><br>
+        
+        <label for="email-post">Email:</label><br>
+        <input type="email" id="email-post" name="email" required /><br><br>
+        
+        <label for="message">Message:</label><br>
+        <textarea id="message" name="message" required></textarea><br><br>
+        
+        <button type="submit">Send Message</button>
+      </form>
+    </section>
+    
+    <hr>
+    
+    <section>
+      <h2>Search (GET Request)</h2>
+      <form action="/api/contact" method="GET">
+        <label for="search">Search Query:</label><br>
+        <input type="text" id="search" name="search" /><br><br>
+        <button type="submit">Search</button>
+      </form>
+    </section>
+    
+    <p>
+      <em>Note:</em> A GET request appends form data to the URL as query parameters, making it suitable for data retrieval. A POST request sends data in the request body, which is better for submitting information securely.
+    </p>
+  </main>
+  <footer>
+    <p>&copy; 2025 Strata Management. All rights reserved.</p>
+  </footer>
+  <script src="/scripts.js"></script>
+</body>
+</html>
+
