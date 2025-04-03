@@ -6,23 +6,49 @@ import Link from "next/link";
 
 export default function Home() {
   const [contactRequests, setContactRequests] = useState([]);
+  const [formValues, setFormValues] = useState({ unit: "", requesttext: "" });
+  const [result, setResult] = useState("");
 
-  // Fetch contact requests from the API endpoint on component mount.
-  useEffect(() => {
-    async function fetchContactRequests() {
-      try {
-        const res = await fetch("/api/contact");
-        const data = await res.json();
-        // Now data is directly the array of contact requests.
-        if (data) {
-          setContactRequests(data);
-        }
-      } catch (error) {
-        console.error("Error fetching contact requests:", error);
-      }
+  // Fetch contact requests from the API endpoint
+  const fetchContactRequests = async () => {
+    try {
+      const res = await fetch("/api/contact");
+      const data = await res.json();
+      setContactRequests(data);
+    } catch (error) {
+      console.error("Error fetching contact requests:", error);
     }
+  };
+
+  useEffect(() => {
     fetchContactRequests();
   }, []);
+
+  // Handle form submission to post a new contact request
+  const submitContactRequest = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formValues),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setResult("Request submitted successfully.");
+        // Clear the form fields
+        setFormValues({ unit: "", requesttext: "" });
+        // Refresh the contact requests list
+        fetchContactRequests();
+      } else {
+        const errorData = await res.json();
+        setResult("Error: " + errorData.error);
+      }
+    } catch (error) {
+      console.error("Error submitting contact request:", error);
+      setResult("Error submitting contact request.");
+    }
+  };
 
   return (
     <div className="container" style={{ padding: "1rem" }}>
@@ -58,22 +84,58 @@ export default function Home() {
               <Link href="/committee">Committee Info</Link>
             </li>
             <li>
-              <Link href="/contact">Contact</Link>
+              {/* This link can be updated if you have a separate management page */}
+              <Link href="/management.html">Management</Link>
             </li>
           </ul>
         </nav>
       </header>
 
       <main>
+        {/* Form for submitting a new contact request */}
+        <section style={{ marginBottom: "2rem" }}>
+          <h2>Submit a New Contact Request</h2>
+          <form onSubmit={submitContactRequest}>
+            <div>
+              <label htmlFor="unit">Unit:</label>
+              <input
+                type="text"
+                id="unit"
+                name="unit"
+                value={formValues.unit}
+                onChange={(e) =>
+                  setFormValues({ ...formValues, unit: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="requesttext">Request:</label>
+              <textarea
+                id="requesttext"
+                name="requesttext"
+                value={formValues.requesttext}
+                onChange={(e) =>
+                  setFormValues({ ...formValues, requesttext: e.target.value })
+                }
+                required
+              ></textarea>
+            </div>
+            <button type="submit">Submit Request</button>
+          </form>
+          {result && <p>{result}</p>}
+        </section>
+
+        {/* Section for displaying recent contact requests */}
         <section style={{ marginBottom: "2rem" }}>
           <h2>Recent Contact Requests</h2>
           {contactRequests.length === 0 ? (
             <p>No contact requests yet.</p>
           ) : (
             <ul>
-              {contactRequests.map((request, index) => (
+              {contactRequests.map((req, index) => (
                 <li key={index}>
-                  <strong>{request.unit}</strong> reported: {request.requesttext} on {request.date}
+                  <strong>{req.unit}</strong> reported: {req.requesttext} on {req.date}
                 </li>
               ))}
             </ul>
@@ -94,4 +156,5 @@ export default function Home() {
     </div>
   );
 }
+
 

@@ -1,31 +1,95 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Strata Management - Home</title>
-  <link rel="stylesheet" href="/styles.css" />
-</head>
-<body>
-  <header>
-    <h1>Strata Management</h1>
-    <nav>
-      <ul>
-        <li><a href="/index.html">Home</a></li>
-        <li><a href="/notifications.html">Notifications</a></li>
-        <li><a href="/faq.html">FAQ</a></li>
-        <li><a href="/committee.html">Committee Info</a></li>
-        <li><a href="/contact.html">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
-  <main>
-    <h2>Welcome to Our Strata Management Services</h2>
-    <p>This website provides information and support for managing a strata-titled apartment building.</p>
-  </main>
-  <footer>
-    <p>&copy; 2025 Strata Management. All rights reserved.</p>
-  </footer>
-  <script src="/scripts.js"></script>
-</body>
-</html>
+"use client";
+
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+
+export default function Home() {
+  const [contactRequests, setContactRequests] = useState([]);
+
+  // Fetch contact requests from the API endpoint on component mount.
+  useEffect(() => {
+    async function fetchContactRequests() {
+      try {
+        const res = await fetch("/api/contact");
+        const data = await res.json();
+        setContactRequests(data);
+      } catch (error) {
+        console.error("Error fetching contact requests:", error);
+      }
+    }
+    fetchContactRequests();
+  }, []);
+
+  return (
+    <div className="container" style={{ padding: "1rem" }}>
+      <header style={{ textAlign: "center", marginBottom: "2rem" }}>
+        <Image
+          src="/logo.png"
+          alt="Strata Management Logo"
+          width={180}
+          height={38}
+          priority
+        />
+        <h1>Contact Requests</h1>
+        <nav>
+          <ul
+            style={{
+              listStyle: "none",
+              padding: 0,
+              display: "flex",
+              justifyContent: "center",
+              gap: "1rem",
+            }}
+          >
+            <li>
+              <Link href="/index">Home</Link>
+            </li>
+            <li>
+              <Link href="/notifications">Notifications</Link>
+            </li>
+            <li>
+              <Link href="/faq">FAQ</Link>
+            </li>
+            <li>
+              <Link href="/committee">Committee Info</Link>
+            </li>
+            <li>
+              {/* Point to your new management page */}
+              <Link href="/management.html">Management</Link>
+            </li>
+          </ul>
+        </nav>
+      </header>
+
+      <main>
+        <section style={{ marginBottom: "2rem" }}>
+          <h2>Recent Contact Requests</h2>
+          {contactRequests.length === 0 ? (
+            <p>No contact requests yet.</p>
+          ) : (
+            <ul>
+              {contactRequests.map((req, index) => (
+                <li key={index}>
+                  <strong>{req.unit}</strong> reported: {req.requesttext} on {req.date}
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      </main>
+
+      <footer
+        style={{
+          textAlign: "center",
+          padding: "1rem",
+          backgroundColor: "#2d3e50",
+          color: "#fff",
+        }}
+      >
+        <p>&copy; 2025 Strata Management. All rights reserved.</p>
+      </footer>
+    </div>
+  );
+}
+
