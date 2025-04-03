@@ -1,0 +1,38 @@
+/* src/app/Home.module.css */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #f9fafb;
+}
+
+.header {
+  color: #2563eb; /* Blue accent */
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.subheader {
+  font-size: 1.25rem;
+  color: #374151;
+  margin-bottom: 2rem;
+}
+
+.overview {
+  background-color: #e5e7eb;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  color: #1f2937;
+}
+
+.apiBox {
+  background-color: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-top: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: monospace;
+  white-space: pre-wrap;
+}
