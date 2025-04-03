@@ -2,10 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Base theme variables for light mode */
+/* Custom theme variables */
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --accent: #2563eb; /* A nice blue accent color */
   --font-sans: var(--font-geist-sans, "Helvetica Neue", Arial, sans-serif);
   --font-mono: var(--font-geist-mono, "SFMono-Regular", Menlo, monospace);
 }

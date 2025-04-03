@@ -1,11 +1,10 @@
-// src/app/page.tsx
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 
 export default function Home() {
-  // State to store data fetched from the API
-  const [apiData, setApiData] = useState(null);
+  const [apiData, setApiData] = useState<any>(null);
 
   useEffect(() => {
     fetch("/api/requests")
@@ -15,29 +14,36 @@ export default function Home() {
   }, []);
 
   return (
-    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "2rem" }}>
-      <header style={{ marginBottom: "2rem" }}>
-        <h1>Welcome to the Strata Management System</h1>
-        <p>
-          This platform provides essential information and functionality for managing
-          our strata-titled apartment building.
+    <div className="max-w-4xl mx-auto p-8">
+      {/* Header */}
+      <header className="mb-8">
+        <h1 className="text-4xl font-bold text-blue-600">
+          Welcome to the Strata Management System
+        </h1>
+        <p className="mt-2 text-lg text-gray-700">
+          Manage your strata-titled apartment building efficiently with our comprehensive platform.
         </p>
       </header>
-      {/* No duplicate navigation here—navigation is rendered via layout.tsx */}
-      <section style={{ marginBottom: "2rem" }}>
-        <h2>System Overview</h2>
-        <p>
-          Use the navigation above to explore different features of our system...
+
+      {/* System Overview */}
+      <section className="mb-8">
+        <h2 className="text-2xl font-semibold text-blue-500 mb-4">System Overview</h2>
+        <p className="text-gray-800">
+          Use the navigation above to explore features such as notifications, FAQs, committee details, and the strata request submission form.
         </p>
       </section>
+
+      {/* API Data Demonstration */}
       <section>
-        <h2>API Data Demonstration</h2>
+        <h2 className="text-2xl font-semibold text-blue-500 mb-4">API Data Demonstration</h2>
         {apiData ? (
-          <pre style={{ background: "#f0f0f0", padding: "1rem" }}>
-            {JSON.stringify(apiData, null, 2)}
-          </pre>
+          <div className="bg-gray-100 p-4 rounded shadow">
+            <pre className="text-gray-800 text-sm whitespace-pre-wrap">
+              {JSON.stringify(apiData, null, 2)}
+            </pre>
+          </div>
         ) : (
-          <p>Loading API data...</p>
+          <p className="text-gray-600">Loading API data...</p>
         )}
       </section>
     </div>
