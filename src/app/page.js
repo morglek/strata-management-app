@@ -73,7 +73,7 @@ export default function Home() {
             <ul>
               {contactRequests.map((request, index) => (
                 <li key={index}>
-                  <strong>{request.unit}</strong> reported: {request.issue} on {request.date}
+                  <strong>{request.unit}</strong> reported: {request.requesttext} on {request.date}
                 </li>
               ))}
             </ul>

@@ -1,35 +1,37 @@
-// src/app/api/contact.ts
+import type { NextApiRequest, NextApiResponse } from "next";
 
-export interface ContactSubmission {
-    name: string;
-    email: string;
-    message: string;
-    timestamp: number;
-  }
-  
-  // Temporary in‑memory store for contact requests (renamed from "submissions" to "contactRequests")
-  const contactRequests: ContactSubmission[] = [];
-  
-  /**
-   * Retrieves all contact requests.
-   */
-  export function getContactRequests(): ContactSubmission[] {
-    return contactRequests;
-  }
-  
-  /**
-   * Adds a new contact request.
-   * @param requestData - The new contact data (without a timestamp).
-   * @returns The added contact request with a timestamp.
-   */
-  export function addContactRequest(
-    requestData: Omit<ContactSubmission, "timestamp">
-  ): ContactSubmission {
-    const newRequest: ContactSubmission = {
-      ...requestData,
-      timestamp: Date.now(),
+interface ContactRequest {
+  unit: string;
+  requesttext: string;
+  date: string;
+}
+
+let contactRequests: ContactRequest[] = [];
+
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method === "GET") {
+    return res.status(200).json(contactRequests);
+  } else if (req.method === "POST") {
+    const { unit, requesttext } = req.body;
+
+    if (!unit || !requesttext) {
+      return res
+        .status(400)
+        .json({ error: "Missing required fields: unit and requesttext" });
+    }
+
+    const newRequest: ContactRequest = {
+      unit,
+      requesttext,
+      date: new Date().toISOString(),
     };
+
     contactRequests.push(newRequest);
-    return newRequest;
+    return res.status(201).json(newRequest);
+  } else {
+    res.setHeader("Allow", ["GET", "POST"]);
+    return res
+      .status(405)
+      .json({ error: `Method ${req.method} not allowed` });
   }
-  
+}

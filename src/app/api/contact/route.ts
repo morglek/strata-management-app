@@ -1,29 +1,43 @@
-// src/app/api/contact/route.ts
+import { NextResponse } from 'next/server';
 
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { getContactRequests, addContactRequest } from "../contact_structure";
-
-// Handle GET requests: returns all contact requests.
-export async function GET(request: NextRequest) {
-  const contactRequests = getContactRequests();
-  return NextResponse.json(contactRequests, { status: 200 });
+interface ContactRequest {
+  unit: string;
+  issue: string;
+  date: string;
 }
 
-// Handle POST requests: adds a new contact request.
-export async function POST(request: NextRequest) {
+let contactRequests: ContactRequest[] = [];
+
+export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const newRequest = addContactRequest(body);
+    const { unit, issue } = await request.json();
+    
+    // Check if required fields are present
+    if (!unit || !issue) {
+      return NextResponse.json(
+        { error: 'Missing required fields: unit and issue are required.' },
+        { status: 400 }
+      );
+    }
+
+    const newRequest: ContactRequest = {
+      unit,
+      issue,
+      date: new Date().toISOString(),
+    };
+
+    contactRequests.push(newRequest);
+    
+    return NextResponse.json(newRequest, { status: 201 });
+  } catch (error) {
+    console.error("Error processing request:", error);
     return NextResponse.json(
-      { message: "Contact request received", data: newRequest },
-      { status: 201 }
-    );
-  } catch (error: any) {
-    return NextResponse.json(
-      { message: "Error processing contact request", error: error.message },
+      { error: 'Failed to process request' },
       { status: 500 }
     );
   }
 }
 
+export async function GET(request: Request) {
+  return NextResponse.json(contactRequests);
+}
