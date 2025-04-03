@@ -5,23 +5,23 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
-  const [submissions, setSubmissions] = useState([]);
+  const [contactRequests, setContactRequests] = useState([]);
 
-  // Fetch submissions from the contact API on component mount
+  // Fetch contact requests from the API endpoint on component mount.
   useEffect(() => {
-    async function fetchSubmissions() {
+    async function fetchContactRequests() {
       try {
         const res = await fetch("/api/contact");
         const data = await res.json();
-        // Our API returns data in the format { submissions: [...] }
-        if (data.submissions) {
-          setSubmissions(data.submissions);
+        // Now data is directly the array of contact requests.
+        if (data) {
+          setContactRequests(data);
         }
       } catch (error) {
-        console.error("Error fetching contact submissions:", error);
+        console.error("Error fetching contact requests:", error);
       }
     }
-    fetchSubmissions();
+    fetchContactRequests();
   }, []);
 
   return (
@@ -66,18 +66,14 @@ export default function Home() {
 
       <main>
         <section style={{ marginBottom: "2rem" }}>
-          <h2>Recent Contact Form Submissions</h2>
-          {submissions.length === 0 ? (
-            <p>No submissions yet.</p>
+          <h2>Recent Contact Requests</h2>
+          {contactRequests.length === 0 ? (
+            <p>No contact requests yet.</p>
           ) : (
             <ul>
-              {submissions.map((submission, index) => (
+              {contactRequests.map((request, index) => (
                 <li key={index}>
-                  <strong>{submission.name}</strong> ({submission.email}) said:{" "}
-                  {submission.message}{" "}
-                  <em>
-                    at {new Date(submission.timestamp).toLocaleString()}
-                  </em>
+                  <strong>{request.unit}</strong> reported: {request.issue} on {request.date}
                 </li>
               ))}
             </ul>

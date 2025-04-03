@@ -2,27 +2,28 @@
 
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { getContactSubmissions, addContactSubmission } from "../contact";
+import { getContactRequests, addContactRequest } from "../contact";
 
-// Handle GET requests: returns all contact submissions.
+// Handle GET requests: returns all contact requests.
 export async function GET(request: NextRequest) {
-  const submissions = getContactSubmissions();
-  return NextResponse.json({ submissions }, { status: 200 });
+  const contactRequests = getContactRequests();
+  return NextResponse.json(contactRequests, { status: 200 });
 }
 
-// Handle POST requests: adds a new contact submission.
+// Handle POST requests: adds a new contact request.
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const newSubmission = addContactSubmission(body);
+    const newRequest = addContactRequest(body);
     return NextResponse.json(
-      { message: "Contact submission received", data: newSubmission },
+      { message: "Contact request received", data: newRequest },
       { status: 201 }
     );
   } catch (error: any) {
     return NextResponse.json(
-      { message: "Error processing contact submission", error: error.message },
+      { message: "Error processing contact request", error: error.message },
       { status: 500 }
     );
   }
 }
+

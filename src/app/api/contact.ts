@@ -7,29 +7,29 @@ export interface ContactSubmission {
     timestamp: number;
   }
   
-  // Temporary in‑memory store for contact submissions
-  const submissions: ContactSubmission[] = [];
+  // Temporary in‑memory store for contact requests (renamed from "submissions" to "contactRequests")
+  const contactRequests: ContactSubmission[] = [];
   
   /**
-   * Retrieves all contact submissions.
+   * Retrieves all contact requests.
    */
-  export function getContactSubmissions(): ContactSubmission[] {
-    return submissions;
+  export function getContactRequests(): ContactSubmission[] {
+    return contactRequests;
   }
   
   /**
-   * Adds a new contact submission.
-   * @param submission - The new submission data (without a timestamp).
-   * @returns The added submission with a timestamp.
+   * Adds a new contact request.
+   * @param requestData - The new contact data (without a timestamp).
+   * @returns The added contact request with a timestamp.
    */
-  export function addContactSubmission(
-    submission: Omit<ContactSubmission, "timestamp">
+  export function addContactRequest(
+    requestData: Omit<ContactSubmission, "timestamp">
   ): ContactSubmission {
-    const newSubmission: ContactSubmission = {
-      ...submission,
+    const newRequest: ContactSubmission = {
+      ...requestData,
       timestamp: Date.now(),
     };
-    submissions.push(newSubmission);
-    return newSubmission;
+    contactRequests.push(newRequest);
+    return newRequest;
   }
   
