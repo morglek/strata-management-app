@@ -1,30 +1,45 @@
 // src/app/api/requests/route.js
 
-export async function GET(request) {
-  // Simulated GET response data for fetching requests
-  const responseData = {
-    message: "GET request successful",
-    requests: [] // This can be replaced with actual data if needed
-  };
+// Temporary in-memory storage for demonstration purposes.
+// Note: This data is not persisted between server restarts or deployments.
+let requests = [];
 
-  return new Response(JSON.stringify(responseData), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  });
+export async function GET(request) {
+  return new Response(
+    JSON.stringify({
+      message: "GET request successful",
+      requests, // Returns the currently stored requests
+    }),
+    {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    }
+  );
 }
 
 export async function POST(request) {
-  // Parse the JSON body from the POST request
-  const body = await request.json();
-
-  // Process the form data as needed (this example just echoes it back)
-  const responseData = {
-    message: "POST request successful",
-    data: body,
-  };
-
-  return new Response(JSON.stringify(responseData), {
-    status: 201,
-    headers: { "Content-Type": "application/json" },
-  });
+  try {
+    const body = await request.json();
+    // Append the new request data to our in-memory storage.
+    requests.push(body);
+    return new Response(
+      JSON.stringify({
+        message: "POST request successful",
+        data: body,
+      }),
+      {
+        status: 201,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  } catch (error) {
+    return new Response(
+      JSON.stringify({ message: "Error processing request" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
 }
+
