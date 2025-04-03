@@ -2,7 +2,7 @@
 
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { getContactRequests, addContactRequest } from "../contact";
+import { getContactRequests, addContactRequest } from "../contact_structure";
 
 // Handle GET requests: returns all contact requests.
 export async function GET(request: NextRequest) {
