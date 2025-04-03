@@ -1,13 +1,11 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Base theme variables for light mode */
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans, "Helvetica Neue", Arial, sans-serif);
   --font-mono: var(--font-geist-mono, "SFMono-Regular", Menlo, monospace);
 }
