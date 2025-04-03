@@ -43,7 +43,7 @@ export default function Home() {
             }}
           >
             <li>
-              <Link href="/index">Home</Link>
+              <Link href="/">Home</Link>
             </li>
             <li>
               <Link href="/notifications">Notifications</Link>
@@ -55,7 +55,7 @@ export default function Home() {
               <Link href="/committee">Committee Info</Link>
             </li>
             <li>
-              <Link href="/management.html">Management</Link>
+              <Link href="/management">Management</Link>
             </li>
           </ul>
         </nav>
@@ -70,8 +70,7 @@ export default function Home() {
             <ul>
               {contactRequests.map((req, index) => (
                 <li key={index}>
-                  <strong>{req.unit}</strong> reported: {req.requesttext} on{" "}
-                  {req.date}
+                  <strong>{req.unit}</strong> reported: {req.requesttext} on {req.date}
                 </li>
               ))}
             </ul>
@@ -92,4 +91,5 @@ export default function Home() {
     </div>
   );
 }
+
 
