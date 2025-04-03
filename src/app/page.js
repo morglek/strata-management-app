@@ -5,29 +5,30 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
-  const [posts, setPosts] = useState([]);
+  const [submissions, setSubmissions] = useState([]);
 
   // Fetch submissions from the contact API on component mount
   useEffect(() => {
-    async function fetchPosts() {
+    async function fetchSubmissions() {
       try {
         const res = await fetch("/api/contact");
         const data = await res.json();
-        if (data.success) {
-          setPosts(data.posts);
+        // Our API returns data in the format { submissions: [...] }
+        if (data.submissions) {
+          setSubmissions(data.submissions);
         }
       } catch (error) {
-        console.error("Error fetching posts:", error);
+        console.error("Error fetching contact submissions:", error);
       }
     }
-    fetchPosts();
+    fetchSubmissions();
   }, []);
 
   return (
     <div className="container" style={{ padding: "1rem" }}>
       <header style={{ textAlign: "center", marginBottom: "2rem" }}>
         <Image
-          src="/logo.png" // Ensure you have a logo image in your public folder; otherwise, update the filename accordingly.
+          src="/logo.png"
           alt="Strata Management Logo"
           width={180}
           height={38}
@@ -35,31 +36,29 @@ export default function Home() {
         />
         <h1>Welcome to Strata Management Services</h1>
         <nav>
-          <ul style={{ listStyle: "none", padding: 0, display: "flex", justifyContent: "center", gap: "1rem" }}>
+          <ul
+            style={{
+              listStyle: "none",
+              padding: 0,
+              display: "flex",
+              justifyContent: "center",
+              gap: "1rem",
+            }}
+          >
             <li>
-              <Link href="/index">
-                <a>Home</a>
-              </Link>
+              <Link href="/index">Home</Link>
             </li>
             <li>
-              <Link href="/notifications">
-                <a>Notifications</a>
-              </Link>
+              <Link href="/notifications">Notifications</Link>
             </li>
             <li>
-              <Link href="/faq">
-                <a>FAQ</a>
-              </Link>
+              <Link href="/faq">FAQ</Link>
             </li>
             <li>
-              <Link href="/committee">
-                <a>Committee Info</a>
-              </Link>
+              <Link href="/committee">Committee Info</Link>
             </li>
             <li>
-              <Link href="/contact">
-                <a>Contact</a>
-              </Link>
+              <Link href="/contact">Contact</Link>
             </li>
           </ul>
         </nav>
@@ -68,14 +67,17 @@ export default function Home() {
       <main>
         <section style={{ marginBottom: "2rem" }}>
           <h2>Recent Contact Form Submissions</h2>
-          {posts.length === 0 ? (
+          {submissions.length === 0 ? (
             <p>No submissions yet.</p>
           ) : (
             <ul>
-              {posts.map((post, index) => (
+              {submissions.map((submission, index) => (
                 <li key={index}>
-                  <strong>{post.name}</strong> ({post.email}) said: {post.message}{" "}
-                  <em>at {new Date(post.timestamp).toLocaleString()}</em>
+                  <strong>{submission.name}</strong> ({submission.email}) said:{" "}
+                  {submission.message}{" "}
+                  <em>
+                    at {new Date(submission.timestamp).toLocaleString()}
+                  </em>
                 </li>
               ))}
             </ul>
@@ -83,7 +85,14 @@ export default function Home() {
         </section>
       </main>
 
-      <footer style={{ textAlign: "center", padding: "1rem", backgroundColor: "#2d3e50", color: "#fff" }}>
+      <footer
+        style={{
+          textAlign: "center",
+          padding: "1rem",
+          backgroundColor: "#2d3e50",
+          color: "#fff",
+        }}
+      >
         <p>&copy; 2025 Strata Management. All rights reserved.</p>
       </footer>
     </div>
