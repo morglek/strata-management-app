@@ -1,3 +1,4 @@
+"use client";
 // src/app/strata-requests/page.tsx
 import { useState, FormEvent, ChangeEvent } from "react";
 
