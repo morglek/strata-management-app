@@ -1,95 +1,84 @@
-"use client";
+"use client"; // Required for client-side interactivity
 
-import { useEffect, useState } from "react";
-import Image from "next/image";
+import { useState } from "react";
 import Link from "next/link";
 
-export default function Home() {
-  const [contactRequests, setContactRequests] = useState([]);
+export default function ManagementPage() {
+  const [unit, setUnit] = useState("");
+  const [requestText, setRequestText] = useState("");
+  const [result, setResult] = useState("");
 
-  // Fetch contact requests from the API endpoint on component mount.
-  useEffect(() => {
-    async function fetchContactRequests() {
-      try {
-        const res = await fetch("/api/contact");
+  // Handle the form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ unit, requesttext: requestText }),
+      });
+      if (res.ok) {
         const data = await res.json();
-        setContactRequests(data);
-      } catch (error) {
-        console.error("Error fetching contact requests:", error);
+        setResult("Request submitted: " + JSON.stringify(data));
+        setUnit("");
+        setRequestText("");
+      } else {
+        const errorData = await res.json();
+        setResult("Error: " + errorData.error);
       }
+    } catch (error) {
+      console.error("Error submitting request:", error);
+      setResult("Error submitting request.");
     }
-    fetchContactRequests();
-  }, []);
+  };
 
   return (
-    <div className="container" style={{ padding: "1rem" }}>
-      <header style={{ textAlign: "center", marginBottom: "2rem" }}>
-        <Image
-          src="/logo.png"
-          alt="Strata Management Logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <h1>Contact Requests</h1>
+    <div>
+      <header>
+        <h1>Submit a New Contact Request</h1>
         <nav>
-          <ul
-            style={{
-              listStyle: "none",
-              padding: 0,
-              display: "flex",
-              justifyContent: "center",
-              gap: "1rem",
-            }}
-          >
-            <li>
-              <Link href="/">Home</Link>
-            </li>
-            <li>
-              <Link href="/notifications">Notifications</Link>
-            </li>
-            <li>
-              <Link href="/faq">FAQ</Link>
-            </li>
-            <li>
-              <Link href="/committee">Committee Info</Link>
-            </li>
-            <li>
-              <Link href="/management">Management</Link>
-            </li>
+          <ul>
+            <li><Link href="/index">Home</Link></li>
+            <li><Link href="/notifications">Notifications</Link></li>
+            <li><Link href="/faq">FAQ</Link></li>
+            <li><Link href="/committee">Committee Info</Link></li>
+            <li><Link href="/management">Management</Link></li>
           </ul>
         </nav>
       </header>
 
       <main>
-        <section style={{ marginBottom: "2rem" }}>
-          <h2>Recent Contact Requests</h2>
-          {contactRequests.length === 0 ? (
-            <p>No contact requests yet.</p>
-          ) : (
-            <ul>
-              {contactRequests.map((req, index) => (
-                <li key={index}>
-                  <strong>{req.unit}</strong> reported: {req.requesttext} on {req.date}
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="unit">Unit:</label><br />
+            <input
+              type="text"
+              id="unit"
+              name="unit"
+              value={unit}
+              onChange={(e) => setUnit(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="requesttext">Request:</label><br />
+            <textarea
+              id="requesttext"
+              name="requesttext"
+              value={requestText}
+              onChange={(e) => setRequestText(e.target.value)}
+              required
+            ></textarea>
+          </div>
+          <button type="submit">Submit Request</button>
+        </form>
+        {result && <div id="result">{result}</div>}
       </main>
 
-      <footer
-        style={{
-          textAlign: "center",
-          padding: "1rem",
-          backgroundColor: "#2d3e50",
-          color: "#fff",
-        }}
-      >
+      <footer>
         <p>&copy; 2025 Strata Management. All rights reserved.</p>
       </footer>
     </div>
   );
 }
-
 
