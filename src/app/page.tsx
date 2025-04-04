@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
+import styles from "./Home.module.css";
 
 export default function Home() {
   const [apiData, setApiData] = useState<any>(null);
@@ -15,39 +16,53 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="max-w-4xl mx-auto p-8">
+    <div className={styles.container}>
       {/* Header with Logo */}
-      <header className="mb-8 flex items-center gap-4">
-        <Image src="/logo.png" alt="Logo" width={80} height={80} />
-        <div>
-          <h1 className="text-4xl font-bold text-blue-600">
-            Welcome to the Strata Management System
-          </h1>
-          <p className="mt-2 text-lg text-gray-700">
-            Manage your strata-titled apartment building efficiently.
+      <header className={styles.header}>
+        <div className={styles.logoContainer}>
+          <Image src="/logo.png" alt="Logo" width={80} height={80} className={styles.logo} />
+        </div>
+        <div className={styles.headerText}>
+          <h1 className={styles.title}>Welcome to the Strata Management System</h1>
+          <p className={styles.subtitle}>
+            Manage your strata-titled apartment building with efficiency and style.
           </p>
         </div>
       </header>
 
+      {/* Navigation Links */}
+      <section className={styles.navSection}>
+        <nav className={styles.nav}>
+          <Link href="/" className={styles.navLink}>Home</Link>
+          <Link href="/notifications" className={styles.navLink}>Notifications</Link>
+          <Link href="/faq" className={styles.navLink}>FAQ</Link>
+          <Link href="/committee" className={styles.navLink}>Committee Info</Link>
+          <Link href="/strata-requests" className={styles.navLink}>Strata Requests</Link>
+          <a href="/info.html" target="_blank" rel="noopener noreferrer" className={styles.navLink}>
+            Info (HTML)
+          </a>
+        </nav>
+      </section>
+
       {/* System Overview */}
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold text-blue-500 mb-4">System Overview</h2>
-        <p className="text-gray-800">
+      <section className={styles.overviewSection}>
+        <h2 className={styles.sectionTitle}>System Overview</h2>
+        <p className={styles.sectionText}>
           Use the navigation above to explore features such as notifications, FAQs, committee details, and the strata request submission form.
         </p>
       </section>
 
       {/* API Data Demonstration */}
-      <section>
-        <h2 className="text-2xl font-semibold text-blue-500 mb-4">API Data Demonstration</h2>
+      <section className={styles.apiSection}>
+        <h2 className={styles.sectionTitle}>API Data Demonstration</h2>
         {apiData ? (
-          <div className="bg-gray-100 p-4 rounded shadow">
-            <pre className="text-gray-800 text-sm whitespace-pre-wrap">
+          <div className={styles.apiCard}>
+            <pre className={styles.apiText}>
               {JSON.stringify(apiData, null, 2)}
             </pre>
           </div>
         ) : (
-          <p className="text-gray-600">Loading API data...</p>
+          <p className={styles.sectionText}>Loading API data...</p>
         )}
       </section>
     </div>
